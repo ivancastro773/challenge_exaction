@@ -1,0 +1,23 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container-login{
+    display: flex;
+    text-align: center;
+/*     border: 1px solid red; */
+}
+.card{
+    width: 300px;
+    text-align: center;
+}
+.card-body{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.btn-login{
+    margin-top: 15px;
+}
