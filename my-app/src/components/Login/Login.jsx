@@ -4,15 +4,10 @@ import { useNavigate } from "react-router-dom";
 import "./style-login.css";
 //axios
 import Axios from "axios";
-//antd
-import { Input, Button } from "antd";
-import { InfoCircleOutlined, UserOutlined } from "@ant-design/icons";
-import { Space } from "antd";
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 const Login = () => {
   const initialState = {
-    email: "",
+    username: "",
     password: "",
   };
   const user = {
@@ -21,7 +16,8 @@ const Login = () => {
   };
   const [authdata, setAuthData] = useState(initialState);
   const [dataUser, setDataUser] = useState(user);
-  const { email, password } = authdata;
+  const [showPass, setShowPass] = useState(false);
+  const { username, password } = authdata;
 
   const handleInputChange = (e) => {
     const { target } = e;
@@ -43,13 +39,15 @@ const Login = () => {
         method: "post",
         url: "https://telecom.exactian.info/ws2/segfi/users/Login",
         data: {
-          user_name: email,
+          user_name: username,
           password: password,
         },
       });
 
-      /* setUserData(response.data); */
-      console.log(response.data.response);
+/*       setUserData(response.data); */
+      console.log(response.data);
+      localStorage.setItem("userToken", response.data.response.token);
+      localStorage.setItem("username", response.data.response.user_name);
       //redirect
       navigate("status-employee");
     } catch (error) {
@@ -57,6 +55,17 @@ const Login = () => {
     }
   };
 
+  function fcShowPassword() {
+    var x = document.getElementById("myInput");
+    var changeIcon = document.getElementById("iconPass");
+    if (x.type === "password") {
+      x.type = "text";
+      setShowPass(true);
+    } else {
+      x.type = "password";
+      setShowPass(false);
+    }
+  }
   return (
     <>
       <div className="container">
@@ -65,33 +74,53 @@ const Login = () => {
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               <label for="exampleFormControlInput1" className="form-label">
-                Username
+                Usuario
               </label>
-              <input
-                type="text"
-                name="email"
-                className="form-control"
-                placeholder="Email"
-                required
-                autoFocus
-                value={email}
-                onChange={handleInputChange}
-              />
+              <div className="inline">
+                <input
+                  type="text"
+                  name="username"
+                  className="form-control"
+                  placeholder="Usuario"
+                  required
+                  autoFocus
+                  value={username}
+                  onChange={handleInputChange}
+                />
+                <i id="iconPass" class="fas fa-user"></i>
+              </div>
+
               <label htmlFor="exampleFormControlInput1" className="form-label">
-                Password
+              Contraseña
               </label>
-              <input
-                type="password"
-                name="password"
-                className="form-control"
-                placeholder="Password"
-                required
-                value={password}
-                onChange={handleInputChange}
-              />
-                <button type="submit" className="btn btn-primary btn-login">
-                  Ingresar
-                </button>
+              <div className="inline">
+                <input
+                  type="password"
+                  name="password"
+                  id="myInput"
+                  className="form-control"
+                  placeholder="Contraseña"
+                  required
+                  value={password}
+                  onChange={handleInputChange}
+                />
+                {showPass ? (
+                  <i
+                    id="iconPass"
+                    class="fas fa-eye"
+                    onClick={fcShowPassword}
+                  ></i>
+                ) : (
+                  <i
+                    id="iconPass"
+                    class="fas fa-eye-slash"
+                    onClick={fcShowPassword}
+                  ></i>
+                )}
+              </div>
+              <button type="submit" className="btn btn-primary btn-login">
+                Ingresar
+              </button>
             </form>
           </div>
         </div>

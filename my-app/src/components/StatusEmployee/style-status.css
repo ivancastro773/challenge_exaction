@@ -18,3 +18,13 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+.background{
+    background-color: lightcyan;
+    height: 100vh;
+}
+.card-header-employee{
+    background-color: lightgreen;
+}
+.card-header-site{
+    background-color: darkturquoise;
+}

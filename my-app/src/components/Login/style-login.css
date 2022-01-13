@@ -7,7 +7,6 @@
 .container-login{
     display: flex;
     text-align: center;
-/*     border: 1px solid red; */
 }
 .card{
     width: 300px;
@@ -20,4 +19,11 @@
 }
 .btn-login{
     margin-top: 15px;
+}
+.inline{
+    display: flex;
+}
+#iconPass{
+    margin-top: 10px;
+    margin-left: 5px;
 }

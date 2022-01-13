@@ -3,11 +3,14 @@ import "./style-status.css";
 import App from "../../App";
 import Axios from "axios";
 import Employee from "../Employee/Employee";
+import { useNavigate } from "react-router-dom";
 
 const StatusEmployee = () => {
   const initialEmployee = {};
   const [dniData, setDniData] = useState("");
   const [DataEmployee, setDataEmployee] = useState(initialEmployee);
+  const [msgSearch, setMgSearch] = useState(true);
+  const userName = localStorage.getItem("username");
   const { dni } = dniData;
   const handleInputChange = (e) => {
     const { target } = e;
@@ -24,8 +27,7 @@ const StatusEmployee = () => {
     e.preventDefault();
 
     try {
-      const token =
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2NDIwNTIzNTksInN1YiI6ImNoZWNrdXAiLCJ0eXBlIjoiMyJ9.CXvkAFlIaJFUecqQDsFoA3oSrRtTXGHqn4Tb2lmHN1U";
+      const token = localStorage.getItem("userToken");
       const response = await Axios({
         method: "get",
         url: "https://telecom.exactian.info/ws2/segfi/employees/Employees",
@@ -37,42 +39,75 @@ const StatusEmployee = () => {
       console.log(response);
       if (response.data.response == "") {
         console.log("no tiene");
+        setDataEmployee(response.data.response);
+        setMgSearch(false);
       } else {
         setDataEmployee(response.data.response[0]);
+        setMgSearch(false);
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    const authToken = localStorage.getItem("userToken");
+    if (authToken == "") {
+      console.log("sin login");
+      //redirect
+      navigate("/");
+    }
+  });
+  const logout = () => {
+    localStorage.setItem("userToken", "");
+    //redirect
+    navigate("/");
+  };
   return (
     <>
-      <div className="container-status">
-        <form onSubmit={handleSubmit}>
-          <div className="form-input">
-            <label>DNI</label>
-            <br />
-            <input
-              type="text"
-              name="dni"
-              placeholder="DNI"
-              required
-              autoFocus
-              value={dni}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="">
-            <button type="submit" className="btn btn-primary">
-              Buscar
-            </button>
-          </div>
-        </form>
-      </div>
-      <div className="cont-employee">
-        {Object.values(DataEmployee) == "" ? (
-          "Busque al Empleado por DNI..."
+      <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand">Usuario: {userName}</a>
+          <button class="btn btn-outline-danger" onClick={logout} type="submit">
+            Cerrar Sesion
+          </button>
+        </div>
+      </nav>
+      <div className="background">
+        <div className="container-status">
+          <form onSubmit={handleSubmit}>
+            <div className="form-input">
+              <label>DNI</label>
+              <br />
+              <input
+                type="text"
+                name="dni"
+                placeholder="DNI"
+                className="form-control"
+                required
+                autoFocus
+                value={dni}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="">
+              <button type="submit" className="btn btn-primary">
+                Buscar
+              </button>
+            </div>
+          </form>
+        </div>
+        {msgSearch ? (
+          <div className="cont-employee">Busque al Empleado por DNI...</div>
         ) : (
-          <Employee dataEm={DataEmployee} />
+          <div className="cont-employee">
+            {Object.values(DataEmployee) == "" ? (
+              "NO EXISTE EL EMPLEADO."
+            ) : (
+              <Employee dataEm={DataEmployee} />
+            )}
+          </div>
         )}
       </div>
     </>
