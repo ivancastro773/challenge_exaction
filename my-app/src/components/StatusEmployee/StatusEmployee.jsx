@@ -4,6 +4,7 @@ import App from "../../App";
 import Axios from "axios";
 import Employee from "../Employee/Employee";
 import { useNavigate } from "react-router-dom";
+import {Toast} from '../../sweetAlert/toast';
 
 const StatusEmployee = () => {
   const initialEmployee = {};
@@ -58,6 +59,11 @@ const StatusEmployee = () => {
       console.log("sin login");
       //redirect
       navigate("/");
+    }else{
+      Toast.fire({
+        icon: 'success',
+        title: 'Usuario logeado!'
+      })
     }
   });
   const logout = () => {

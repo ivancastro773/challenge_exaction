@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 // css
 import "./style-login.css";
 //axios
@@ -52,7 +53,12 @@ const Login = () => {
       navigate("status-employee");
     } catch (error) {
       const msgError = error.response.data.message;
-    
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: msgError,
+      })
+      
     }
   };
 
