@@ -1,23 +1,22 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
+//sweetAlert
+import Swal from "sweetalert2";
 // css
 import "./style-login.css";
 //axios
 import Axios from "axios";
+//Components
+import Loader from "../Loader/Loader";
 
 const Login = () => {
   const initialState = {
     username: "",
     password: "",
   };
-  const user = {
-    user_name: "checkup",
-    password: "Exactian2021",
-  };
   const [authdata, setAuthData] = useState(initialState);
-  const [dataUser, setDataUser] = useState(user);
   const [showPass, setShowPass] = useState(false);
+  const [loader, setLoader] = useState(false);
   const { username, password } = authdata;
 
   const handleInputChange = (e) => {
@@ -32,7 +31,9 @@ const Login = () => {
   };
 
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
+    setLoader(true);
     e.preventDefault();
 
     try {
@@ -45,20 +46,22 @@ const Login = () => {
         },
       });
 
-/*       setUserData(response.data); */
       console.log(response.data);
+      //save token and username in localstorage
       localStorage.setItem("userToken", response.data.response.token);
       localStorage.setItem("username", response.data.response.user_name);
+
       //redirect
       navigate("status-employee");
+      setLoader(false);
     } catch (error) {
       const msgError = error.response.data.message;
       Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
+        icon: "error",
+        title: "Oops...",
         text: msgError,
-      })
-      
+      });
+      setLoader(false);
     }
   };
 
@@ -76,61 +79,69 @@ const Login = () => {
   return (
     <>
       <div className="container">
-        <div className="card">
-          <div className="card-header">Login</div>
-          <div className="card-body">
-            <form onSubmit={handleSubmit}>
-              <label for="exampleFormControlInput1" className="form-label">
-                Usuario
-              </label>
-              <div className="inline">
-                <input
-                  type="text"
-                  name="username"
-                  className="form-control"
-                  placeholder="Usuario"
-                  required
-                  autoFocus
-                  value={username}
-                  onChange={handleInputChange}
-                />
-                <i id="iconPass" class="fas fa-user"></i>
-              </div>
+        {loader ? (
+          <Loader />
+        ) : (
+          <div className="card">
+            <div className="card-header">Login</div>
+            <div className="card-body">
+              <form onSubmit={handleSubmit}>
+                <label for="exampleFormControlInput1" className="form-label">
+                  Usuario
+                </label>
+                <div className="inline">
+                  <input
+                    type="text"
+                    name="username"
+                    className="form-control"
+                    placeholder="Usuario"
+                    required
+                    autoFocus
+                    value={username}
+                    onChange={handleInputChange}
+                  />
+                  <i id="iconPass" class="fas fa-user"></i>
+                </div>
 
-              <label htmlFor="exampleFormControlInput1" className="form-label">
-              Contraseña
-              </label>
-              <div className="inline">
-                <input
-                  type="password"
-                  name="password"
-                  id="myInput"
-                  className="form-control"
-                  placeholder="Contraseña"
-                  required
-                  value={password}
-                  onChange={handleInputChange}
-                />
-                {showPass ? (
-                  <i
-                    id="iconPass"
-                    class="fas fa-eye"
-                    onClick={fcShowPassword}
-                  ></i>
-                ) : (
-                  <i
-                    id="iconPass"
-                    class="fas fa-eye-slash"
-                    onClick={fcShowPassword}
-                  ></i>
-                )}
-              </div>
-              <button type="submit" className="btn btn-primary btn-login">
-                Ingresar
-              </button>
-            </form>
+                <label
+                  htmlFor="exampleFormControlInput1"
+                  className="form-label"
+                >
+                  Contraseña
+                </label>
+                <div className="inline">
+                  <input
+                    type="password"
+                    name="password"
+                    id="myInput"
+                    className="form-control"
+                    placeholder="Contraseña"
+                    required
+                    value={password}
+                    onChange={handleInputChange}
+                  />
+                  {showPass ? (
+                    <i
+                      id="iconPass"
+                      class="fas fa-eye"
+                      onClick={fcShowPassword}
+                    ></i>
+                  ) : (
+                    <i
+                      id="iconPass"
+                      class="fas fa-eye-slash"
+                      onClick={fcShowPassword}
+                    ></i>
+                  )}
+                </div>
+                <button type="submit" className="btn btn-primary btn-login">
+                  Ingresar
+                </button>
+              </form>
+            </div>
           </div>
-        </div>
+        )}
+
         <div className="container-login"></div>
       </div>
     </>

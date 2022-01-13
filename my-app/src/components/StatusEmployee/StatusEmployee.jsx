@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from "react";
-import "./style-status.css";
-import App from "../../App";
-import Axios from "axios";
-import Employee from "../Employee/Employee";
 import { useNavigate } from "react-router-dom";
-import {Toast} from '../../sweetAlert/toast';
+//css
+import "./style-status.css";
+//Axios
+import Axios from "axios";
+//SweetAlert
+import { Toast } from "../../sweetAlert/toast";
+//Components
+import Employee from "../Employee/Employee";
+import Loader from "../Loader/Loader";
 
 const StatusEmployee = () => {
   const initialEmployee = {};
   const [dniData, setDniData] = useState("");
   const [DataEmployee, setDataEmployee] = useState(initialEmployee);
   const [msgSearch, setMgSearch] = useState(true);
+  const [loader, setLoader] = useState(false);
   const userName = localStorage.getItem("username");
   const { dni } = dniData;
+
   const handleInputChange = (e) => {
     const { target } = e;
     const { name, value } = target;
@@ -24,14 +30,17 @@ const StatusEmployee = () => {
     });
   };
 
+  //Search employee with axios
   const handleSubmit = async (e) => {
+    setLoader(true);
     e.preventDefault();
-
+    const urlGetEmployee =
+      "https://telecom.exactian.info/ws2/segfi/employees/Employees";
     try {
       const token = localStorage.getItem("userToken");
       const response = await Axios({
         method: "get",
-        url: "https://telecom.exactian.info/ws2/segfi/employees/Employees",
+        url: urlGetEmployee,
         params: {
           dni: dni,
         },
@@ -41,47 +50,55 @@ const StatusEmployee = () => {
       if (response.data.response == "") {
         console.log("no tiene");
         setDataEmployee(response.data.response);
+        setLoader(false);
         setMgSearch(false);
       } else {
         setDataEmployee(response.data.response[0]);
+        setLoader(false);
         setMgSearch(false);
       }
     } catch (error) {
       const msgError = error.response.data.response.errors[0].message;
-      console.log(error.response.data.response.errors[0].message);
+      Toast.fire({
+        icon: "error",
+        title: msgError,
+      });
+      setLoader(false);
     }
   };
 
   const navigate = useNavigate();
   useEffect(() => {
     const authToken = localStorage.getItem("userToken");
+    //verify auth
     if (authToken == "") {
       console.log("sin login");
       //redirect
       navigate("/");
-    }else{
-      Toast.fire({
-        icon: 'success',
-        title: 'Usuario logeado!'
-      })
     }
   });
   const logout = () => {
+    //set empty token
     localStorage.setItem("userToken", "");
     //redirect
     navigate("/");
   };
   return (
     <>
-      <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-          <a class="navbar-brand">Usuario: {userName}</a>
-          <button class="btn btn-outline-danger" onClick={logout} type="submit">
-            Cerrar Sesion
-          </button>
-        </div>
-      </nav>
       <div className="background">
+        <nav className="navbar navbar-light bg-light">
+          <div className="container-fluid">
+            <a className="navbar-brand username">Usuario: <strong>{userName}</strong></a>
+            <button
+              className="btn btn-outline-danger"
+              onClick={logout}
+              type="submit"
+            >
+              Cerrar Sesion
+            </button>
+          </div>
+        </nav>
+
         <div className="container-status">
           <form onSubmit={handleSubmit}>
             <div className="form-input">
@@ -98,22 +115,32 @@ const StatusEmployee = () => {
               />
             </div>
             <div className="">
-              <button type="submit" className="btn btn-primary">
-                Buscar
+              <button type="submit" className="btn btn-primary btn-login">
+                Buscar Empleado
               </button>
             </div>
           </form>
         </div>
+
         {msgSearch ? (
           <div className="cont-employee">Busque al Empleado por DNI...</div>
         ) : (
           <div className="cont-employee">
             {Object.values(DataEmployee) == "" ? (
-              "NO EXISTE EL EMPLEADO."
+              <div class="alert alert-danger" role="alert">
+                NO EXISTE EL EMPLEADO.
+              </div>
             ) : (
               <Employee dataEm={DataEmployee} />
             )}
           </div>
+        )}
+        {loader ? (
+          <div className="cont-employee">
+            <Loader />
+          </div>
+        ) : (
+          ""
         )}
       </div>
     </>

@@ -1,26 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import Sites from "../Sites/Sites";
-import { useState } from "react";
+
 const Employee = ({ dataEm }) => {
-  const cant_sites = [1, 2, 3, 1];
-  const [data, setData] = useState("");
+  const cant_sites = dataEm.declaration_sites;
+
   return (
     <>
       <div className="card w-50">
-        <div className="card-header card-header-employee">{dataEm.employee_name}</div>
+        <div className="card-header card-header-employee">
+          <strong>{dataEm.employee_name}</strong>
+        </div>
         <div className="card-body">
           <ul className="list-group list-group-flush">
             <li className="list-group-item">
-              <p>CUIL: {dataEm.employee_code}</p>
+              <p>
+                <strong>CUIL:</strong> {dataEm.employee_code}
+              </p>
             </li>
             <li className="list-group-item">
-              <p>Contratista</p>
-              <p>CUIT: {dataEm.contractor_code}</p>
-              <p>Razon Social: {dataEm.contractor_name}</p>
+              <p>
+                <strong>Contratista</strong>
+              </p>
+              <p>
+                <strong>CUIT:</strong> {dataEm.contractor_code}
+              </p>
+              <p>
+                <strong>Razon Social:</strong> {dataEm.contractor_name}
+              </p>
             </li>
             <li className="list-group-item">
-              <p>Tareas</p>
-              <p>{dataEm.total_declaration_sites}</p>
+              <p>
+                <strong>Tareas</strong>
+              </p>
+              <p>{dataEm.tasks}</p>
             </li>
           </ul>
         </div>
@@ -33,10 +45,47 @@ const Employee = ({ dataEm }) => {
       )}
       <div className="sites">
         {cant_sites.map((sites, i) => (
-          <Sites key={i} dataEm={dataEm} />
+          <Sites key={i} id={i} dataEm={cant_sites[i]} />
         ))}
       </div>
     </>
   );
 };
 export default Employee;
+{
+  /* <p key={i}>{cantidad[i].contractor_name}</p> */
+}
+/* const cant_sites = [
+  {
+    contractor_name: "LOTOI S.A.",
+    contractor_code: "30-71587045-9",
+    sites: [
+      {
+        site_description: "CALL CENTER PERSONAL PLAZA",
+        street_address: "AV COLON 4450",
+        location_name: "Cordoba ",
+      },
+      {
+        site_description: "BALNEARIO MAR DEL PLATA_WI-FI",
+        street_address: "PASEO VICTORIA OCAMPO S/N° (d)",
+        location_name: "Mar Del Plata",
+      },
+    ],
+  },
+  {
+    contractor_name: "PEPE S.A.",
+    contractor_code: "30-71587045-9",
+    sites: [
+      {
+        site_description: "CALL CENTER PERSONAL PLAZA",
+        street_address: "AV COLON 4450",
+        location_name: "Cordoba ",
+      },
+      {
+        site_description: "BALNEARIO MAR DEL PLATA_WI-FI",
+        street_address: "PASEO VICTORIA OCAMPO S/N° (d)",
+        location_name: "Mar Del Plata",
+      },
+    ],
+  },
+]; */

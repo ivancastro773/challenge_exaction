@@ -3,7 +3,6 @@
     align-items: center;
     text-align: center;
     flex-direction: column;
-
 }
 .cont-employee{
     display: flex;
@@ -11,6 +10,12 @@
     flex-direction: column;
     margin-top: 30px;
     gap: 1rem;
+    background-color: lightcyan;
+}
+.username{
+    border: 2px solid lightseagreen;
+    padding: 5px;
+    border-radius: 15px;
 }
 .sites{
     display: flex;
@@ -22,6 +27,7 @@
     background-color: lightcyan;
     height: 100vh;
 }
+
 .card-header-employee{
     background-color: lightgreen;
 }
