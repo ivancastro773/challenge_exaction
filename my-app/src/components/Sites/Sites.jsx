@@ -17,7 +17,7 @@ const Sites = ({ dataEm }) => {
                 <p>Razon Social: {dataEm.contractor_name}</p>
               </li>
               <li className="list-group-item">
-                <p>Tareas</p>
+                <p>Tareas:</p>
                 <p>{dataEm.total_declaration_sites}</p>
               </li>
             </ul>
