@@ -46,7 +46,8 @@ const StatusEmployee = () => {
         setMgSearch(false);
       }
     } catch (error) {
-      console.log(error);
+      const msgError = error.response.data.response.errors[0].message;
+      console.log(error.response.data.response.errors[0].message);
     }
   };
 
@@ -85,7 +86,6 @@ const StatusEmployee = () => {
                 name="dni"
                 placeholder="DNI"
                 className="form-control"
-                required
                 autoFocus
                 value={dni}
                 onChange={handleInputChange}

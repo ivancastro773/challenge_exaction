@@ -51,7 +51,8 @@ const Login = () => {
       //redirect
       navigate("status-employee");
     } catch (error) {
-      console.log(error);
+      const msgError = error.response.data.message;
+    
     }
   };
 
