@@ -53,6 +53,11 @@ const StatusEmployee = () => {
         setLoader(false);
         setMgSearch(false);
       } else {
+        const msgSuccess = "Empleado encontrado!"
+        Toast.fire({
+          icon: "success",
+          title: msgSuccess,
+        });
         setDataEmployee(response.data.response[0]);
         setLoader(false);
         setMgSearch(false);
@@ -131,7 +136,7 @@ const StatusEmployee = () => {
                 NO EXISTE EL EMPLEADO.
               </div>
             ) : (
-              <Employee dataEm={DataEmployee} />
+              <Employee dataEm={DataEmployee} load={setLoader} />
             )}
           </div>
         )}
