@@ -36,39 +36,48 @@ const StatusEmployee = () => {
     e.preventDefault();
     const urlGetEmployee =
       "https://telecom.exactian.info/ws2/segfi/employees/Employees";
-    try {
-      const token = localStorage.getItem("userToken");
-      const response = await Axios({
-        method: "get",
-        url: urlGetEmployee,
-        params: {
-          dni: dni,
-        },
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log(response);
-      if (response.data.response == "") {
-        console.log("no tiene");
-        setDataEmployee(response.data.response);
-        setLoader(false);
-        setMgSearch(false);
-      } else {
-        const msgSuccess = "Empleado encontrado!"
-        Toast.fire({
-          icon: "success",
-          title: msgSuccess,
-        });
-        setDataEmployee(response.data.response[0]);
-        setLoader(false);
-        setMgSearch(false);
-      }
-    } catch (error) {
-      const msgError = error.response.data.response.errors[0].message;
-      Toast.fire({
-        icon: "error",
-        title: msgError,
-      });
+
+    if (isNaN(dni)) {
       setLoader(false);
+      return Toast.fire({
+        icon: "error",
+        title: "El DNI deber ser un número",
+      });
+    } else {
+      try {
+        const token = localStorage.getItem("userToken");
+        const response = await Axios({
+          method: "get",
+          url: urlGetEmployee,
+          params: {
+            dni: dni,
+          },
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log(response);
+        if (response.data.response == "") {
+          console.log("no tiene");
+          setDataEmployee(response.data.response);
+          setLoader(false);
+          setMgSearch(false);
+        } else {
+          const msgSuccess = "Empleado encontrado!";
+          Toast.fire({
+            icon: "success",
+            title: msgSuccess,
+          });
+          setDataEmployee(response.data.response[0]);
+          setLoader(false);
+          setMgSearch(false);
+        }
+      } catch (error) {
+        const msgError = error.response.data.response.errors[0].message;
+        Toast.fire({
+          icon: "error",
+          title: msgError,
+        });
+        setLoader(false);
+      }
     }
   };
 
@@ -77,23 +86,27 @@ const StatusEmployee = () => {
     const authToken = localStorage.getItem("userToken");
     //verify auth
     if (authToken == "") {
-      console.log("sin login");
+      console.log("No esta logeado");
       //redirect
       navigate("/");
     }
   });
+
   const logout = () => {
     //set empty token
     localStorage.setItem("userToken", "");
     //redirect
     navigate("/");
   };
+
   return (
     <>
       <div className="background">
         <nav className="navbar navbar-light bg-light">
           <div className="container-fluid">
-            <a className="navbar-brand username">Usuario: <strong>{userName}</strong></a>
+            <a className="navbar-brand username">
+              Usuario: <strong>{userName}</strong>
+            </a>
             <button
               className="btn btn-outline-danger"
               onClick={logout}
