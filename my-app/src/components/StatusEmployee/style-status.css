@@ -27,9 +27,28 @@
     background-color: lightcyan;
     height: 100vh;
 }
+.difStatus{
+    display: flex;
+    gap: 1rem;
+}
 
-.card-header-employee{
+.dif-color-0{
+   color: lightgreen;
+}
+.dif-color-1{
+   color: yellow;
+}
+.dif-color-2{
+   color: lightcoral;
+}
+.card-header-employee-0{
     background-color: lightgreen;
+}
+.card-header-employee-1{
+    background-color: yellow;
+}
+.card-header-employee-2{
+    background-color: lightcoral;
 }
 .card-header-site{
     background-color: darkturquoise;

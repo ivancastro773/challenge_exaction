@@ -107,6 +107,11 @@ const StatusEmployee = () => {
             <a className="navbar-brand username">
               Usuario: <strong>{userName}</strong>
             </a>
+            <div className="difStatus">
+              <span><i class="fas fa-circle dif-color-0"></i> APTO</span>
+              <span><i class="fas fa-circle dif-color-1"></i> APTO PARCIAL</span>
+              <span><i class="fas fa-circle dif-color-2"></i> NO APTO</span>
+            </div>
             <button
               className="btn btn-outline-danger"
               onClick={logout}

@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import Sites from "../Sites/Sites";
 
 const Employee = ({ dataEm }) => {
   const cant_sites = dataEm.declaration_sites;
 
+  const colorStatus =()=>{
+    var x = document.getElementById("headerStatus");
+    if (dataEm.status == 0) {
+      x.classList.add('card-header-employee-0');
+    }if (dataEm.status==1) {
+      x.classList.add('card-header-employee-1');
+    }else{
+      x.classList.add('card-header-employee-2')
+    }
+  }
+  useEffect(() => {
+    colorStatus();
+  });
   return (
     <>
       <div className="card w-50">
-        <div className="card-header card-header-employee">
+        {colorStatus}
+        <div id="headerStatus" className="card-header">
           <strong>{dataEm.employee_name}</strong>
         </div>
         <div className="card-body">
